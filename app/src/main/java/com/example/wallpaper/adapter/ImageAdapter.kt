@@ -30,7 +30,7 @@ class ImageAdapter(private val list: List<Photo>,val itemClickListener: ItemClic
      fun setData(photo: Photo,itemClickListener: ItemClickListener){
          itemView.apply {
                  Glide.with(image)
-                     .load(photo.src.small)
+                     .load(photo.src.medium)
                      .into(image)
          }
          itemView.image.setOnClickListener {

@@ -21,7 +21,6 @@ class MainActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-
         val url=intent.getStringExtra("image")
 
         val urlImage =URL(url)

@@ -45,7 +45,7 @@ private var list= listOf<Photo>()
 
     override fun ClickListener(photo: Photo, position: Int) {
         val intent=Intent(this,MainActivity2::class.java)
-        intent.putExtra("image",photo.src.original)
+        intent.putExtra("image",photo.src.medium)
         startActivity(intent)
     }
 }
