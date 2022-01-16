@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wallpaper.adapter.ImageAdapter
@@ -13,32 +15,36 @@ import com.example.wallpaper.api.Network
 import com.example.wallpaper.interface_clicklistener.ItemClickListener
 import com.example.wallpaper.model.Photo
 import com.example.wallpaper.model.ResponseDTO
+import com.example.wallpaper.viewmodel.ImageViewModel
+import com.example.wallpaper.viewmodel.Image_Repo
+import com.example.wallpaper.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity(),ItemClickListener {
-private var list= listOf<Photo>()
+    lateinit var imageViewModel: ImageViewModel
+private var imageList= mutableListOf<Photo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val api =Network.getInstance().create(API::class.java)
-        api.getImage("563492ad6f91700001000001294f1f4e2a564bdaa903fa3403cdae53","people").enqueue(object : Callback<ResponseDTO> {
-            override fun onResponse(call: Call<ResponseDTO>, response: Response<ResponseDTO>) {
-                list = response.body()!!.photos!!
+        val imageRepo=Image_Repo(api)
+        imageViewModel=ViewModelProvider(this,ViewModelFactory(imageRepo)).get(ImageViewModel::class.java)
+        imageViewModel.images.observe(this, Observer {
+            it.let {
+                imageList.clear()
+                imageList.addAll(it.photos)
                 setRecyclerView()
+
             }
-            override fun onFailure(call: Call<ResponseDTO>, t: Throwable) {
-                Toast.makeText(applicationContext,"No data",Toast.LENGTH_SHORT).show()
-            }
-        }
-        )
+        })
     }
     private fun setRecyclerView() {
-        val adapterClass = ImageAdapter(list,this)
+        val adapterClass = ImageAdapter(imageList,this)
         recyclerView.adapter=adapterClass
         recyclerView.layoutManager = GridLayoutManager(applicationContext,2)
     }

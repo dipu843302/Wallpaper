@@ -10,5 +10,6 @@ import retrofit2.http.Query
 interface API {
 
     @GET("v1/search")
-    fun getImage(@Header("Authorization")token:String,@Query("query")query: String) :Call<ResponseDTO>
+    suspend fun getImage(@Header("Authorization")token:String,
+                         @Query("query")query: String) :Response<ResponseDTO>
 }

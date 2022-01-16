@@ -22,7 +22,6 @@ class MainActivity2 : AppCompatActivity() {
         setContentView(R.layout.activity_main2)
 
         val url=intent.getStringExtra("image")
-
         val urlImage =URL(url)
 
         Glide.with(this).load(url).into(ivImage)
@@ -47,7 +46,6 @@ class MainActivity2 : AppCompatActivity() {
         } catch (e: IOException) {
             null
         }
-
     }
 
 }
